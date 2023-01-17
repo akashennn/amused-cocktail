@@ -1,6 +1,7 @@
+import "antd/dist/reset.css";
 import { Route, Routes } from "react-router-dom";
-import IndexPage from "./routes/index";
 import FavoritesPage from "./routes/favorites";
+import IndexPage from "./routes/index";
 
 export default function App() {
   return (
