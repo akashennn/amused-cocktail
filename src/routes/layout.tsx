@@ -28,6 +28,8 @@ const CustomLayout = styled(Layout)`
   }
 
   .content {
+    display: flex;
+    flex: 1;
     background: rgb(255, 255, 255);
   }
 
