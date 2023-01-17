@@ -1,6 +1,10 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { Cocktail, GetRandomCocktailResponse } from "../types/api";
+import {
+  Cocktail,
+  GetAllFavoritesResponse,
+  GetRandomCocktailResponse,
+} from "../types/api";
 
 type TProps = {
   children: JSX.Element;
@@ -9,11 +13,23 @@ type TProps = {
 type TDefaultValues = {
   // main data
   cocktailsData: Cocktail[];
+
+  // favorites data
+  favoritesData: Cocktail[];
+  favoriteIds: string[];
+  addFavorite: (cocktail: Cocktail) => void;
+  removeFavorite: (idDrink: string) => void;
 };
 
 const defaultValues = {
   // main data
   cocktailsData: [],
+
+  // favorites data
+  favoritesData: [],
+  favoriteIds: [],
+  addFavorite: () => undefined,
+  removeFavorite: () => undefined,
 };
 
 export const AppContext = createContext<TDefaultValues>(defaultValues);
@@ -22,9 +38,18 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
   // main data
   const [cocktailsData, setCocktailsData] = useState<Cocktail[]>([]);
 
-  // get initial data
+  // favorites data
+  const [favoritesData, setFavoritesData] = useState<Cocktail[]>([]);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+
+  // get five random cocktails data
   useEffect(() => {
     getFiveRandomCocktails();
+  }, []);
+
+  // get all favorites data
+  useEffect(() => {
+    getAllFavorites();
   }, []);
 
   const getRandomCocktail = async () => {
@@ -55,10 +80,51 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
     }
   };
 
+  const getAllFavorites = async () => {
+    try {
+      const { data } = await axios.get<GetAllFavoritesResponse>(
+        "http://localhost:3004/favorites"
+      );
+      setFavoritesData(data);
+      setFavoriteIds([...data.map((favorite) => favorite.idDrink)]);
+    } catch (error) {
+      // TODO: report to any error reporting platform
+      console.log("error", error);
+    }
+  };
+
+  const addFavorite = async (cocktail: Cocktail) => {
+    try {
+      await axios.post("http://localhost:3004/favorites", cocktail);
+      setFavoriteIds((favoriteIds) => [...favoriteIds, cocktail.idDrink]);
+    } catch (error) {
+      // TODO: report to any error reporting platform
+      console.log("error", error);
+    }
+  };
+
+  const removeFavorite = async (idDrink: string) => {
+    try {
+      await axios.delete(`http://localhost:3004/favorites/${idDrink}`);
+      setFavoriteIds((favoriteIds) => [
+        ...favoriteIds.filter((favorite) => favorite !== idDrink),
+      ]);
+    } catch (error) {
+      // TODO: report to any error reporting platform
+      console.log("error", error);
+    }
+  };
+
   // exports
   const context = {
     // main data
     cocktailsData,
+
+    // favorites data
+    favoritesData,
+    favoriteIds,
+    addFavorite,
+    removeFavorite,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
