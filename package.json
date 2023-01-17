@@ -21,7 +21,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"json-server --watch db.json --port 3004\"",
+    "start": "concurrently \"react-scripts start\" \"json-server --watch db.json --id idDrink --port 3004\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
