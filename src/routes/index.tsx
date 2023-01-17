@@ -4,11 +4,17 @@ import Meta from "antd/es/card/Meta";
 import { useContext } from "react";
 import styled from "styled-components";
 import CategoryTag from "../components/CategoryTag";
+import Loader from "../components/Loader";
 import { AppContext } from "../contexts/appContext";
 
 const IndexPage = (): JSX.Element => {
   // get data from ctx
   const { cocktailsData } = useContext(AppContext);
+
+  // loading screen until data fetches
+  if (!cocktailsData.length) {
+    return <Loader />;
+  }
 
   return (
     <Container>
