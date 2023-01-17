@@ -1,7 +1,8 @@
 import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
 import { Button, Card } from "antd";
 import Meta from "antd/es/card/Meta";
-import { useContext } from "react";
+import Search from "antd/es/input/Search";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import CategoryTag from "../components/CategoryTag";
 import Loader from "../components/Loader";
@@ -13,12 +14,25 @@ const IndexPage = (): JSX.Element => {
   const { cocktailsData, favoriteIds, addFavorite, removeFavorite } =
     useContext(AppContext);
 
+  // search cocktails using strDrink
+  const [searchText, setSearchText] = useState<string>("");
+
   const onAddFavorites = async (cocktail: Cocktail) => {
     addFavorite(cocktail);
   };
 
   const onRemoveFavorites = async (idDrink: string) => {
     removeFavorite(idDrink);
+  };
+
+  const onInputSearch = (text: string) => {
+    // inputs have been converted to lowercase to use with includes()
+    setSearchText(text.toLocaleLowerCase());
+  };
+
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // inputs have been converted to lowercase to use with includes()
+    setSearchText(event.target.value.toLocaleLowerCase());
   };
 
   // loading screen until data fetches
@@ -28,51 +42,66 @@ const IndexPage = (): JSX.Element => {
 
   return (
     <Container>
-      <div className="card-group">
-        {cocktailsData.map((cocktail) => (
-          <Card
-            hoverable
-            className="card"
-            key={cocktail.idDrink}
-            title={cocktail.strDrink}
-            cover={
-              <img
-                className="card-cover"
-                alt="card cover"
-                src={cocktail.strDrinkThumb}
-              />
-            }
-            extra={
-              <>
-                {favoriteIds.includes(cocktail.idDrink) ? (
-                  <Button
-                    type="ghost"
-                    shape="circle"
-                    icon={<HeartTwoTone twoToneColor="#eb2f96" />}
-                    onClick={() => onRemoveFavorites(cocktail.idDrink)}
-                  />
-                ) : (
-                  <Button
-                    type="ghost"
-                    shape="circle"
-                    icon={<HeartOutlined />}
-                    onClick={() => onAddFavorites(cocktail)}
-                  />
-                )}
-              </>
-            }
-          >
-            <Meta
-              description={
-                <>
-                  <p className="instructions">{cocktail.strInstructions}</p>
+      <Search
+        allowClear
+        size="large"
+        className="search-input"
+        placeholder="Enter cocktail name.."
+        enterButton="Search"
+        onChange={onInputChange}
+        onSearch={onInputSearch}
+      />
 
-                  <CategoryTag name={cocktail.strCategory} />
+      <div className="card-group">
+        {[...cocktailsData]
+          // handle search, strDrink is converted to lowercase to match with search texts
+          .filter((cocktail) =>
+            cocktail.strDrink.toLocaleLowerCase().includes(searchText)
+          )
+          .map((cocktail) => (
+            <Card
+              hoverable
+              className="card"
+              key={cocktail.idDrink}
+              title={cocktail.strDrink}
+              cover={
+                <img
+                  className="card-cover"
+                  alt="card cover"
+                  src={cocktail.strDrinkThumb}
+                />
+              }
+              extra={
+                <>
+                  {favoriteIds.includes(cocktail.idDrink) ? (
+                    <Button
+                      type="ghost"
+                      shape="circle"
+                      icon={<HeartTwoTone twoToneColor="#eb2f96" />}
+                      onClick={() => onRemoveFavorites(cocktail.idDrink)}
+                    />
+                  ) : (
+                    <Button
+                      type="ghost"
+                      shape="circle"
+                      icon={<HeartOutlined />}
+                      onClick={() => onAddFavorites(cocktail)}
+                    />
+                  )}
                 </>
               }
-            />
-          </Card>
-        ))}
+            >
+              <Meta
+                description={
+                  <>
+                    <p className="instructions">{cocktail.strInstructions}</p>
+
+                    <CategoryTag name={cocktail.strCategory} />
+                  </>
+                }
+              />
+            </Card>
+          ))}
       </div>
     </Container>
   );
@@ -84,6 +113,10 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   margin: 12px;
+
+  .search-input {
+    margin-bottom: 12px;
+  }
 
   .card-group {
     display: grid;
