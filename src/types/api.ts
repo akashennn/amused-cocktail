@@ -55,3 +55,5 @@ export type Cocktail = {
 export type GetRandomCocktailResponse = {
     drinks: Cocktail[];
 };
+
+export type GetAllFavoritesResponse = Cocktail[];
