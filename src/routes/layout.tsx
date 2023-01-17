@@ -1,11 +1,34 @@
+import { HeartOutlined, HomeOutlined } from "@ant-design/icons";
 import { Layout } from "antd";
-import { Content } from "antd/es/layout/layout";
-import { Outlet } from "react-router-dom";
+import { Content, Header } from "antd/es/layout/layout";
+import { Link, Outlet } from "react-router-dom";
 import styled from "styled-components";
 
-const layout = (): JSX.Element => {
+type TProps = {
+  pathname: string;
+};
+
+const layout = ({ pathname }: TProps): JSX.Element => {
   return (
     <CustomLayout>
+      <Header className="header">
+        <Link to="/" className="navigation-link">
+          <HomeOutlined
+            className={`${
+              pathname === "/" ? "navigation-link-active" : ""
+            } navigation-link-icon`}
+          />
+        </Link>
+
+        <Link to="/favorites" className="navigation-link">
+          <HeartOutlined
+            className={`${
+              pathname === "/favorites" ? "navigation-link-active" : ""
+            } navigation-link-icon`}
+          />
+        </Link>
+      </Header>
+
       <Content className="body">
         <div className="content">
           <Outlet />
@@ -18,7 +41,7 @@ const layout = (): JSX.Element => {
 // style overrides
 const CustomLayout = styled(Layout)`
   /* styles for mobile devices */
-  height: 100vh;
+  height: calc(100vh - 48px);
   overflow: auto;
 
   .body {
@@ -33,6 +56,37 @@ const CustomLayout = styled(Layout)`
     background: rgb(255, 255, 255);
   }
 
+  .header {
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+    color: white !important;
+    padding: 0;
+    height: 48px;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  .navigation-link {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .navigation-link-icon {
+    font-size: 20px;
+    color: black;
+  }
+
+  .navigation-link-icon.navigation-link-active {
+    color: #1677ff;
+  }
+
   /* styles for tablets */
   @media (min-width: 768px) {
   }
@@ -41,10 +95,19 @@ const CustomLayout = styled(Layout)`
   @media (min-width: 1024px) {
     justify-content: center;
     align-items: center;
+    height: calc(100vh);
 
     .body {
       width: 1024px;
       height: auto;
+      margin-top: 60px;
+    }
+
+    .header {
+      top: 0;
+      padding: 12px;
+      justify-content: flex-start;
+      align-items: center;
     }
   }
 `;
