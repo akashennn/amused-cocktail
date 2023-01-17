@@ -1,15 +1,25 @@
 import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
-import { Card, Tag } from "antd";
+import { Button, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useContext } from "react";
 import styled from "styled-components";
 import CategoryTag from "../components/CategoryTag";
 import Loader from "../components/Loader";
 import { AppContext } from "../contexts/appContext";
+import { Cocktail } from "../types/api";
 
 const IndexPage = (): JSX.Element => {
   // get data from ctx
-  const { cocktailsData } = useContext(AppContext);
+  const { cocktailsData, favoriteIds, addFavorite, removeFavorite } =
+    useContext(AppContext);
+
+  const onAddFavorites = async (cocktail: Cocktail) => {
+    addFavorite(cocktail);
+  };
+
+  const onRemoveFavorites = async (idDrink: string) => {
+    removeFavorite(idDrink);
+  };
 
   // loading screen until data fetches
   if (!cocktailsData.length) {
@@ -33,8 +43,23 @@ const IndexPage = (): JSX.Element => {
               />
             }
             extra={
-              // <HeartOutlined key="" />
-              <HeartTwoTone twoToneColor="#eb2f96" />
+              <>
+                {favoriteIds.includes(cocktail.idDrink) ? (
+                  <Button
+                    type="ghost"
+                    shape="circle"
+                    icon={<HeartTwoTone twoToneColor="#eb2f96" />}
+                    onClick={() => onRemoveFavorites(cocktail.idDrink)}
+                  />
+                ) : (
+                  <Button
+                    type="ghost"
+                    shape="circle"
+                    icon={<HeartOutlined />}
+                    onClick={() => onAddFavorites(cocktail)}
+                  />
+                )}
+              </>
             }
           >
             <Meta
