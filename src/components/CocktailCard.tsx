@@ -75,6 +75,8 @@ const CocktailCard = ({ cocktail }: TProps): JSX.Element => {
 };
 
 const Container = styled.div`
+  display: flex;
+
   :not(:last-child) {
     margin-bottom: 12px;
   }

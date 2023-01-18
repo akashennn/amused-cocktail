@@ -1,4 +1,4 @@
-import { FireOutlined, FireTwoTone } from "@ant-design/icons";
+import { FireTwoTone } from "@ant-design/icons";
 import { Button, Tooltip } from "antd";
 import Search from "antd/es/input/Search";
 import { useContext, useState } from "react";
@@ -81,7 +81,7 @@ const Container = styled.div`
 
   .actions-container {
     display: flex;
-    flex: 1;
+    /* flex: 1; */
     margin-bottom: 12px;
     justify-content: center;
     align-items: center;
