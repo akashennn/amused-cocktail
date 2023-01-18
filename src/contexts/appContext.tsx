@@ -14,6 +14,7 @@ type TProps = {
 type TDefaultValues = {
   // main data
   cocktailsData: Cocktail[];
+  getFiveRandomCocktails: () => void;
 
   // favorites data
   favoritesData: Cocktail[];
@@ -25,6 +26,7 @@ type TDefaultValues = {
 const defaultValues = {
   // main data
   cocktailsData: [],
+  getFiveRandomCocktails: () => undefined,
 
   // favorites data
   favoritesData: [],
@@ -150,6 +152,7 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
   const context = {
     // main data
     cocktailsData,
+    getFiveRandomCocktails,
 
     // favorites data
     favoritesData,
