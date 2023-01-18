@@ -50,7 +50,7 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
   // get all favorites data
   useEffect(() => {
     getAllFavorites();
-  }, []);
+  }, [favoriteIds.length]);
 
   const getRandomCocktail = async () => {
     const { data } = await axios.get<GetRandomCocktailResponse>(
