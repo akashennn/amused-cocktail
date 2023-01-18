@@ -63,6 +63,8 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
   };
 
   const getFiveRandomCocktails = async () => {
+    setCocktailsData([]);
+
     try {
       // save only random cocktails, even if the API returns the same cocktail twice
       const cocktailsMap = new Map<string, Cocktail>();
