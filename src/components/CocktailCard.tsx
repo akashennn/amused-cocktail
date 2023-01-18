@@ -1,5 +1,5 @@
 import { HeartTwoTone, HeartOutlined } from "@ant-design/icons";
-import { Card, Button } from "antd";
+import { Card, Button, Tooltip } from "antd";
 import Meta from "antd/es/card/Meta";
 import React, { useContext } from "react";
 import styled from "styled-components";
@@ -39,20 +39,23 @@ const CocktailCard = ({ cocktail }: TProps): JSX.Element => {
         extra={
           <>
             {favoriteIds.includes(cocktail.idDrink) ? (
-              <Button
-                type="ghost"
-                shape="circle"
-                icon={<HeartTwoTone twoToneColor="#eb2f96" />}
-                //   disabled
-                onClick={() => onRemoveFavorites(cocktail.idDrink)}
-              />
+              <Tooltip placement="top" title="Remove">
+                <Button
+                  type="ghost"
+                  shape="circle"
+                  icon={<HeartTwoTone twoToneColor="#eb2f96" />}
+                  onClick={() => onRemoveFavorites(cocktail.idDrink)}
+                />
+              </Tooltip>
             ) : (
-              <Button
-                type="ghost"
-                shape="circle"
-                icon={<HeartOutlined />}
-                onClick={() => onAddFavorites(cocktail)}
-              />
+              <Tooltip placement="top" title="Add">
+                <Button
+                  type="ghost"
+                  shape="circle"
+                  icon={<HeartOutlined />}
+                  onClick={() => onAddFavorites(cocktail)}
+                />
+              </Tooltip>
             )}
           </>
         }
