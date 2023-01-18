@@ -1,4 +1,3 @@
-import { HeartOutlined, HomeOutlined } from "@ant-design/icons";
 import { Layout } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import { Link, Outlet } from "react-router-dom";
@@ -12,20 +11,22 @@ const layout = ({ pathname }: TProps): JSX.Element => {
   return (
     <CustomLayout>
       <Header className="header">
-        <Link to="/" className="navigation-link">
-          <HomeOutlined
-            className={`${
-              pathname === "/" ? "navigation-link-active" : ""
-            } navigation-link-icon`}
-          />
+        <Link
+          to="/"
+          className={`${
+            pathname === "/" ? "navigation-link-active" : ""
+          } navigation-link`}
+        >
+          Cocktails
         </Link>
 
-        <Link to="/favorites" className="navigation-link">
-          <HeartOutlined
-            className={`${
-              pathname === "/favorites" ? "navigation-link-active" : ""
-            } navigation-link-icon`}
-          />
+        <Link
+          to="/favorites"
+          className={`${
+            pathname === "/favorites" ? "navigation-link-active" : ""
+          } navigation-link`}
+        >
+          Favorites
         </Link>
       </Header>
 
@@ -76,14 +77,11 @@ const CustomLayout = styled(Layout)`
     display: flex;
     flex: 1;
     justify-content: center;
-  }
-
-  .navigation-link-icon {
-    font-size: 20px;
     color: black;
+    font-weight: bold;
   }
 
-  .navigation-link-icon.navigation-link-active {
+  .navigation-link-active {
     color: #1677ff;
   }
 
