@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import {
@@ -75,8 +76,11 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
       // update main data state
       setCocktailsData([...cocktailsMap.values()]);
     } catch (error) {
-      // TODO: report to any error reporting platform
-      console.log("error", error);
+      notification.error({
+        message: "Something went wrong!",
+        description: "Please try again shortly!",
+        placement: "bottomLeft",
+      });
     }
   };
 
@@ -85,33 +89,60 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
       const { data } = await axios.get<GetAllFavoritesResponse>(
         "http://localhost:3004/favorites"
       );
+
+      // update favorites data
       setFavoritesData(data);
       setFavoriteIds([...data.map((favorite) => favorite.idDrink)]);
     } catch (error) {
-      // TODO: report to any error reporting platform
-      console.log("error", error);
+      notification.error({
+        message: "Something went wrong!",
+        description: "Please try again shortly!",
+        placement: "bottomLeft",
+      });
     }
   };
 
   const addFavorite = async (cocktail: Cocktail) => {
     try {
       await axios.post("http://localhost:3004/favorites", cocktail);
+
       setFavoriteIds((favoriteIds) => [...favoriteIds, cocktail.idDrink]);
+
+      notification.success({
+        message: "NEW FAVORITE!",
+        description: `${cocktail.strDrink} added to favorites!`,
+        placement: "bottomLeft",
+      });
     } catch (error) {
-      // TODO: report to any error reporting platform
-      console.log("error", error);
+      notification.error({
+        message: "Something went wrong!",
+        description: "Please try again shortly!",
+        placement: "bottomLeft",
+      });
     }
   };
 
   const removeFavorite = async (idDrink: string) => {
     try {
       await axios.delete(`http://localhost:3004/favorites/${idDrink}`);
+
       setFavoriteIds((favoriteIds) => [
         ...favoriteIds.filter((favorite) => favorite !== idDrink),
       ]);
+
+      const deletedFavorite = favoritesData.find((f) => f.idDrink === idDrink);
+
+      notification.warning({
+        message: "FAVORITE REMOVED!",
+        description: `${deletedFavorite?.strDrink} removed from the favorites!`,
+        placement: "bottomLeft",
+      });
     } catch (error) {
-      // TODO: report to any error reporting platform
-      console.log("error", error);
+      notification.error({
+        message: "Something went wrong!",
+        description: "Please try again shortly!",
+        placement: "bottomLeft",
+      });
     }
   };
 
