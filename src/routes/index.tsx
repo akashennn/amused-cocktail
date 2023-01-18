@@ -46,7 +46,7 @@ const IndexPage = (): JSX.Element => {
             cocktail.strDrink.toLocaleLowerCase().includes(searchText)
           )
           .map((cocktail) => (
-            <CocktailCard cocktail={cocktail} />
+            <CocktailCard cocktail={cocktail} key={cocktail.idDrink} />
           ))}
       </div>
     </Container>

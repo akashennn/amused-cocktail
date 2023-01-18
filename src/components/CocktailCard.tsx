@@ -28,7 +28,6 @@ const CocktailCard = ({ cocktail }: TProps): JSX.Element => {
       <Card
         hoverable
         className="card"
-        key={cocktail.idDrink}
         title={cocktail.strDrink}
         cover={
           <img
