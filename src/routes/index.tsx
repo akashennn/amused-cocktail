@@ -1,5 +1,5 @@
 import { FireTwoTone } from "@ant-design/icons";
-import { Button, Tooltip } from "antd";
+import { Button, Empty, Tooltip } from "antd";
 import Search from "antd/es/input/Search";
 import { useContext, useState } from "react";
 import styled from "styled-components";
@@ -13,6 +13,11 @@ const IndexPage = (): JSX.Element => {
 
   // search cocktails using strDrink
   const [searchText, setSearchText] = useState<string>("");
+
+  // handle search hits, strDrink is converted to lowercase to match with search texts
+  const searchedCocktails = [...cocktailsData].filter((cocktail) =>
+    cocktail.strDrink.toLocaleLowerCase().includes(searchText)
+  );
 
   const onInputSearch = (text: string) => {
     // inputs have been converted to lowercase to use with includes()
@@ -58,16 +63,18 @@ const IndexPage = (): JSX.Element => {
         </Tooltip>
       </div>
 
-      <div className="card-group">
-        {[...cocktailsData]
-          // handle search, strDrink is converted to lowercase to match with search texts
-          .filter((cocktail) =>
-            cocktail.strDrink.toLocaleLowerCase().includes(searchText)
-          )
-          .map((cocktail) => (
+      {/* check for search hits */}
+      {searchedCocktails.length === 0 ? (
+        <Container>
+          <Empty />
+        </Container>
+      ) : (
+        <div className="card-group">
+          {searchedCocktails.map((cocktail) => (
             <CocktailCard cocktail={cocktail} key={cocktail.idDrink} />
           ))}
-      </div>
+        </div>
+      )}
     </Container>
   );
 };
@@ -78,6 +85,15 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   margin: 12px;
+
+  .ant-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
 
   .actions-container {
     display: flex;
