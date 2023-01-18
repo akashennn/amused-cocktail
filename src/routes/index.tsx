@@ -1,3 +1,5 @@
+import { FireOutlined, FireTwoTone } from "@ant-design/icons";
+import { Button, Tooltip } from "antd";
 import Search from "antd/es/input/Search";
 import { useContext, useState } from "react";
 import styled from "styled-components";
@@ -7,7 +9,7 @@ import { AppContext } from "../contexts/appContext";
 
 const IndexPage = (): JSX.Element => {
   // get data from ctx
-  const { cocktailsData } = useContext(AppContext);
+  const { cocktailsData, getFiveRandomCocktails } = useContext(AppContext);
 
   // search cocktails using strDrink
   const [searchText, setSearchText] = useState<string>("");
@@ -29,15 +31,32 @@ const IndexPage = (): JSX.Element => {
 
   return (
     <Container>
-      <Search
-        allowClear
-        size="large"
-        className="search-input"
-        placeholder="Enter cocktail name.."
-        enterButton="Search"
-        onChange={onInputChange}
-        onSearch={onInputSearch}
-      />
+      <div className="actions-container">
+        <Search
+          allowClear
+          size="large"
+          className="search-input"
+          placeholder="Enter cocktail name.."
+          enterButton="Search"
+          onChange={onInputChange}
+          onSearch={onInputSearch}
+        />
+
+        <Tooltip placement="top" title="Refresh">
+          <Button
+            type="dashed"
+            shape="circle"
+            className="refresh-button"
+            icon={
+              <FireTwoTone
+                twoToneColor="#f39c12"
+                className="refresh-button-icon"
+              />
+            }
+            onClick={getFiveRandomCocktails}
+          />
+        </Tooltip>
+      </div>
 
       <div className="card-group">
         {[...cocktailsData]
@@ -60,8 +79,27 @@ const Container = styled.div`
   flex-direction: column;
   margin: 12px;
 
-  .search-input {
+  .actions-container {
+    display: flex;
+    flex: 1;
     margin-bottom: 12px;
+    justify-content: center;
+    align-items: center;
+
+    .search-input {
+      display: flex;
+      flex: 1;
+      margin-right: 12px;
+    }
+
+    .refresh-button:hover {
+      color: #f39c12;
+      border-color: #f39c12;
+    }
+
+    .refresh-button-icon {
+      font-size: 20px;
+    }
   }
 
   .card-group {
