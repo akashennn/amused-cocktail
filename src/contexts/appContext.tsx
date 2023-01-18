@@ -63,6 +63,7 @@ export const AppContextProvider = ({ children }: TProps): JSX.Element => {
   };
 
   const getFiveRandomCocktails = async () => {
+    // clear existing data to trigger loading
     setCocktailsData([]);
 
     try {
